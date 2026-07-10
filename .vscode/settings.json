@@ -1,0 +1,22 @@
+{
+  "editor.formatOnSave": true,
+  "files.insertFinalNewline": true,
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": [
+    "--path-mode=abs"
+  ],
+  "go.formatTool": "custom",
+  "go.alternateTools": {
+    "customFormatter": "golangci-lint"
+  },
+  "go.formatFlags": [
+    "fmt",
+    "--stdin"
+  ],
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features""
+  }
+}

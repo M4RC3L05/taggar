@@ -18,4 +18,4 @@ code-check:
 
 .PHONY: main
 main:
-	go run $(GO_FLAGS) main.go
+	go build $(GO_FLAGS) -o ./.bin/main cmd/main.go

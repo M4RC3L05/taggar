@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/m4rc3l05/taggar/internal/cli/edit"
 	"github.com/m4rc3l05/taggar/internal/cli/view"
 	"github.com/spf13/cobra"
 )
@@ -17,10 +18,11 @@ var rootCmd = &cobra.Command{
 	Short:         "View and edit audio tags",
 	Args:          cobra.ExactArgs(1),
 	SilenceErrors: false,
+	Version:       "0.0.0",
 }
 
 func init() {
-	rootCmd.AddCommand(view.NewCommand())
+	rootCmd.AddCommand(view.NewCommand(), edit.NewCommand())
 }
 
 func main() {

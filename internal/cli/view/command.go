@@ -15,6 +15,10 @@ func NewCommand() *cobra.Command {
 		Short: "View audio tags",
 		Args:  cobra.NoArgs,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
+			if !cmd.Flags().Changed("path") {
+				return nil
+			}
+
 			path, err := cmd.Flags().GetString("path")
 			if err != nil {
 				return err

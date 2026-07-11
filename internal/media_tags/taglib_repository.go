@@ -174,8 +174,8 @@ func (t TaglibMediaTagsRepository) SetMediaTagsFromPath(
 		}
 	}
 
-	if tags.TrackCount != nil && props.Format != "flac" && props.Format != "opus" &&
-		props.Format != "ogg" {
+	if tags.TrackCount != nil && (props.Format == "flac" || props.Format == "opus" ||
+		props.Format == "ogg") {
 		tagsToSet["TRACKTOTAL"] = []string{*tags.TrackCount}
 	}
 
@@ -193,8 +193,8 @@ func (t TaglibMediaTagsRepository) SetMediaTagsFromPath(
 		}
 	}
 
-	if tags.DiscCount != nil && props.Format != "flac" && props.Format != "opus" &&
-		props.Format != "ogg" {
+	if tags.DiscCount != nil && (props.Format == "flac" || props.Format == "opus" ||
+		props.Format == "ogg") {
 		tagsToSet["DISCTOTAL"] = []string{*tags.Disc}
 	}
 

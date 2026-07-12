@@ -36,8 +36,6 @@ func DisplayMediaTags(tags MediaTags) error {
 		printLine("Cover", nil)
 	}
 
-	fmt.Println("")
-
 	printLine("Title", tags.Title)
 	printLine("Artist", tags.Artist)
 	printLine("Album", tags.Album)

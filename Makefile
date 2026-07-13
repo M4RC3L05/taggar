@@ -25,3 +25,7 @@ code-check:
 .PHONY: main
 main:
 	go build $(GO_FLAGS) -o ./.bin/main cmd/main.go
+
+.PHONY: install
+install: main
+	cp -rv ./.bin/main ~/.local/bin/taggar

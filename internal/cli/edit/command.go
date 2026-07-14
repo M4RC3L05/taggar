@@ -78,7 +78,7 @@ func NewCommand() *cobra.Command {
 				return err
 			}
 
-			return mediatags.DisplayMediaTags(*tags)
+			return mediatags.DisplayMediaTags(tags)
 		},
 	}
 

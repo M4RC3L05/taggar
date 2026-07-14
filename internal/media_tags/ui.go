@@ -9,7 +9,11 @@ import (
 	"github.com/blacktop/go-termimg"
 )
 
-func DisplayMediaTags(tags MediaTags) error {
+func DisplayMediaTags(tags *MediaTags) error {
+	if tags == nil {
+		return nil
+	}
+
 	padW := 13
 
 	printLine := func(label string, val *string) {

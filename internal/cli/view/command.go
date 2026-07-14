@@ -1,8 +1,7 @@
 package view
 
 import (
-	"errors"
-	"os"
+	"fmt"
 
 	"github.com/m4rc3l05/taggar/internal"
 	mediatags "github.com/m4rc3l05/taggar/internal/media_tags"
@@ -41,12 +40,13 @@ func NewCommand() *cobra.Command {
 				return err
 			}
 
+			fmt.Println("Getting metadata")
 			tags, err := mediatags.TaglibMediaTagsRepository{}.GetMediaTagsFromPath(path)
 			if err != nil {
 				return err
 			}
 
-			return mediatags.DisplayMediaTags(*tags)
+			return mediatags.DisplayMediaTags(tags)
 		},
 	}
 

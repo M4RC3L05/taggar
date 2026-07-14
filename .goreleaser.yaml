@@ -51,8 +51,17 @@ homebrew_casks:
   - repository:
       owner: m4rc3l05
       name: homebrew-tap
-      # token: "{{ .Env.GH_PAT }}"
+      token: "{{ .Env.GH_PAT }}"
     homepage: https://github.com/M4RC3L05/taggar
     description: Media tagging viewer & editor 
     license: MIT
-    directory: Formula
+    commit_msg_template: "Update {{ .ProjectName }} to {{ .Tag }}"
+    generate_completions_from_executable:
+      args:
+        - completion
+      shell_parameter_format: cobra
+      shells:
+        - bash
+        - zsh
+        - fish
+        - pwsh

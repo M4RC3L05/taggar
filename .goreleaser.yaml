@@ -59,7 +59,6 @@ homebrew_casks:
     generate_completions_from_executable:
       args:
         - completion
-      shell_parameter_format: cobra
       shells:
         - bash
         - zsh

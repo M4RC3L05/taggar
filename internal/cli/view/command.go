@@ -12,28 +12,6 @@ func NewCommand() *cobra.Command {
 	viewCmd := &cobra.Command{
 		Use:   "view",
 		Short: "View audio tags",
-		Args:  cobra.NoArgs,
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			if !cmd.Flags().Changed("path") {
-				return nil
-			}
-
-			path, err := cmd.Flags().GetString("path")
-			if err != nil {
-				return err
-			}
-
-			f, err := os.Stat(path)
-			if err != nil {
-				return err
-			}
-
-			if !f.Mode().IsRegular() {
-				return errors.New("path is not a file")
-			}
-
-			return nil
-		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			path, err := cmd.Flags().GetString("path")
 			if err != nil {

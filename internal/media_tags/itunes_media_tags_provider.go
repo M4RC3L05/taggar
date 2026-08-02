@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -27,6 +28,20 @@ type AppleMusicResult struct {
 	DiscNumber           *int       `json:"discNumber,omitempty"`
 	TrackCount           *int       `json:"trackCount,omitempty"`
 	TrackNumber          *int       `json:"trackNumber,omitempty"`
+	TrackViewUrl         *string    `json:"trackViewUrl,omitempty"`
+}
+
+type AppleMusicSchemaSong struct {
+	Audio *struct {
+		ByArtist *[]struct {
+			Name *string `json:"name,omitempty"`
+		} `json:"byArtist,omitempty"`
+		InAlbum *struct {
+			ByArtist *[]struct {
+				Name *string `json:"name,omitempty"`
+			} `json:"byArtist,omitempty"`
+		} `json:"inAlbum,omitempty"`
+	} `json:"audio,omitempty"`
 }
 
 type ITunesMediaTagsProvider struct {
@@ -50,6 +65,10 @@ func StrPtrToStrSlicePtr(pi *string) *[]string {
 
 	return new([]string{*pi})
 }
+
+var songJsonLDRe = regexp.MustCompile(
+	`(?is)<script\s+(?:[^>]*\s+)?id\s*=\s*["\']?schema:song["\']?(?:\s+[^>]*?)?\s+type\s*=\s*["\']?application/ld\+json["\']?(?:\s+[^>]*)?>(.+?)</script>`,
+)
 
 func (i ITunesMediaTagsProvider) FetchMediaTags() (*MediaTags, error) {
 	res, err := http.Get(fmt.Sprintf("https://itunes.apple.com/lookup?id=%s", i.Id))
@@ -117,6 +136,61 @@ func (i ITunesMediaTagsProvider) FetchMediaTags() (*MediaTags, error) {
 
 		mediaTags.Cover = &MediaTagsCover{
 			Data: data,
+		}
+	}
+
+	// properly fetch all artists of this track
+	if match.TrackViewUrl != nil {
+		res, err := http.Get(*match.TrackViewUrl)
+		defer func() {
+			_ = res.Body.Close()
+		}()
+
+		if err == nil {
+			html, err := io.ReadAll(res.Body)
+
+			if err == nil {
+				matches := songJsonLDRe.FindStringSubmatch(string(html))
+
+				if len(matches) > 1 {
+					jsonContent := matches[1]
+
+					var x AppleMusicSchemaSong
+					err = json.Unmarshal([]byte(jsonContent), &x)
+
+					if err == nil {
+						if x.Audio != nil && x.Audio.ByArtist != nil && len(*x.Audio.ByArtist) > 0 {
+							finalArtist := []string{}
+
+							for _, artist := range *x.Audio.ByArtist {
+								if artist.Name != nil {
+									finalArtist = append(finalArtist, *artist.Name)
+								}
+							}
+
+							if len(finalArtist) > 0 {
+								mediaTags.Artist = &finalArtist
+							}
+						}
+
+						if x.Audio != nil && x.Audio.InAlbum != nil &&
+							x.Audio.InAlbum.ByArtist != nil &&
+							len(*x.Audio.InAlbum.ByArtist) > 0 {
+							finalArtist := []string{}
+
+							for _, artist := range *x.Audio.InAlbum.ByArtist {
+								if artist.Name != nil {
+									finalArtist = append(finalArtist, *artist.Name)
+								}
+							}
+
+							if len(finalArtist) > 0 {
+								mediaTags.AlbumArtist = &finalArtist
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 

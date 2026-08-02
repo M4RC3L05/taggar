@@ -15,21 +15,21 @@ type TaglibMediaTagsRepository struct{}
 
 var _ MediaTagsRepository = TaglibMediaTagsRepository{}
 
-func parseNumberAndCount(s string) (num *string, count *string) {
+func parseNumberAndCount(s string) (num string, count string) {
 	matches := numberAndCountRe.FindStringSubmatch(s)
 
-	var nRes *string
-	var cRes *string
+	var nRes string
+	var cRes string
 	if len(matches) > 1 {
 		n := matches[1]
 		t := matches[2]
 
 		if n != "" {
-			nRes = &matches[1]
+			nRes = matches[1]
 		}
 
 		if t != "" {
-			cRes = &matches[2]
+			cRes = matches[2]
 		}
 	}
 
@@ -69,58 +69,58 @@ func (t TaglibMediaTagsRepository) GetMediaTagsFromPath(path string) (*MediaTags
 		}
 	}
 
-	if val, ok := tags[taglib.AlbumArtist]; ok && len(val) > 0 {
-		mediaTags.AlbumArtist = &val[0]
+	if val, ok := tags[taglib.AlbumArtist]; ok {
+		mediaTags.AlbumArtist = &val
 	}
 
-	if val, ok := tags[taglib.Album]; ok && len(val) > 0 {
-		mediaTags.Album = &val[0]
+	if val, ok := tags[taglib.Album]; ok {
+		mediaTags.Album = &val
 	}
 
-	if val, ok := tags[taglib.Title]; ok && len(val) > 0 {
-		mediaTags.Title = &val[0]
+	if val, ok := tags[taglib.Title]; ok {
+		mediaTags.Title = &val
 	}
 
-	if val, ok := tags[taglib.Date]; ok && len(val) > 0 {
-		mediaTags.Year = &val[0]
+	if val, ok := tags[taglib.Date]; ok {
+		mediaTags.Year = &val
 	}
 
-	if val, ok := tags[taglib.Artist]; ok && len(val) > 0 {
-		mediaTags.Artist = &val[0]
+	if val, ok := tags[taglib.Artist]; ok {
+		mediaTags.Artist = &val
 	}
 
-	if val, ok := tags[taglib.Genre]; ok && len(val) > 0 {
-		mediaTags.Genre = &val[0]
+	if val, ok := tags[taglib.Genre]; ok {
+		mediaTags.Genre = &val
 	}
 
-	if val, ok := tags[taglib.TrackNumber]; ok && len(val) > 0 {
+	if val, ok := tags[taglib.TrackNumber]; ok {
 		if props.Format != "flac" && props.Format != "opus" && props.Format != "ogg" {
 			n, c := parseNumberAndCount(val[0])
 
-			mediaTags.Track = n
-			mediaTags.TrackCount = c
+			mediaTags.Track = new([]string{n})
+			mediaTags.TrackCount = new([]string{c})
 		} else {
-			mediaTags.Track = &val[0]
+			mediaTags.Track = &val
 		}
 	}
 
-	if val, ok := tags["TRACKTOTAL"]; ok && len(val) > 0 {
-		mediaTags.TrackCount = &val[0]
+	if val, ok := tags["TRACKTOTAL"]; ok {
+		mediaTags.TrackCount = &val
 	}
 
-	if val, ok := tags[taglib.DiscNumber]; ok && len(val) > 0 {
+	if val, ok := tags[taglib.DiscNumber]; ok {
 		if props.Format != "flac" && props.Format != "opus" && props.Format != "ogg" {
 			n, c := parseNumberAndCount(val[0])
 
-			mediaTags.Disc = n
-			mediaTags.DiscCount = c
+			mediaTags.Disc = new([]string{n})
+			mediaTags.DiscCount = new([]string{c})
 		} else {
-			mediaTags.Disc = &val[0]
+			mediaTags.Disc = &val
 		}
 	}
 
-	if val, ok := tags["DISCTOTAL"]; ok && len(val) > 0 {
-		mediaTags.DiscCount = &val[0]
+	if val, ok := tags["DISCTOTAL"]; ok {
+		mediaTags.DiscCount = &val
 	}
 
 	return &mediaTags, nil
@@ -143,65 +143,65 @@ func (t TaglibMediaTagsRepository) SetMediaTagsFromPath(
 	tagsToSet := map[string][]string{}
 
 	if tags.AlbumArtist != nil {
-		tagsToSet[taglib.AlbumArtist] = []string{*tags.AlbumArtist}
+		tagsToSet[taglib.AlbumArtist] = *tags.AlbumArtist
 	}
 
 	if tags.Album != nil {
-		tagsToSet[taglib.Album] = []string{*tags.Album}
+		tagsToSet[taglib.Album] = *tags.Album
 	}
 
 	if tags.Title != nil {
-		tagsToSet[taglib.Title] = []string{*tags.Title}
+		tagsToSet[taglib.Title] = *tags.Title
 	}
 
 	if tags.Year != nil {
-		tagsToSet[taglib.Date] = []string{*tags.Year}
+		tagsToSet[taglib.Date] = *tags.Year
 	}
 
 	if tags.Artist != nil {
-		tagsToSet[taglib.Artist] = []string{*tags.Artist}
+		tagsToSet[taglib.Artist] = *tags.Artist
 	}
 
 	if tags.Genre != nil {
-		tagsToSet[taglib.Genre] = []string{*tags.Genre}
+		tagsToSet[taglib.Genre] = *tags.Genre
 	}
 
 	if tags.Track != nil {
 		if props.Format != "flac" && props.Format != "opus" && props.Format != "ogg" {
 			final := ""
-			final += *tags.Track
+			final += (*tags.Track)[0]
 
 			if tags.TrackCount != nil {
-				final += " / " + *tags.TrackCount
+				final += " / " + (*tags.TrackCount)[0]
 			}
 			tagsToSet[taglib.TrackNumber] = []string{final}
 		} else {
-			tagsToSet[taglib.TrackNumber] = []string{*tags.Track}
+			tagsToSet[taglib.TrackNumber] = *tags.Track
 		}
 	}
 
 	if tags.TrackCount != nil && (props.Format == "flac" || props.Format == "opus" ||
 		props.Format == "ogg") {
-		tagsToSet["TRACKTOTAL"] = []string{*tags.TrackCount}
+		tagsToSet["TRACKTOTAL"] = *tags.TrackCount
 	}
 
 	if tags.Disc != nil {
 		if props.Format != "flac" && props.Format != "opus" && props.Format != "ogg" {
 			final := ""
-			final += *tags.Disc
+			final += (*tags.Disc)[0]
 
 			if tags.DiscCount != nil {
-				final += " / " + *tags.DiscCount
+				final += " / " + (*tags.DiscCount)[0]
 			}
 			tagsToSet[taglib.DiscNumber] = []string{final}
 		} else {
-			tagsToSet[taglib.DiscNumber] = []string{*tags.Disc}
+			tagsToSet[taglib.DiscNumber] = *tags.Disc
 		}
 	}
 
 	if tags.DiscCount != nil && (props.Format == "flac" || props.Format == "opus" ||
 		props.Format == "ogg") {
-		tagsToSet["DISCTOTAL"] = []string{*tags.Disc}
+		tagsToSet["DISCTOTAL"] = *tags.Disc
 	}
 
 	err = taglib.WriteTags(path, tagsToSet, 0)

@@ -13,9 +13,9 @@ type CobraCmdMediaTagsProvider struct {
 
 var _ IProvider = ITunesMediaTagsProvider{}
 
-func Set(cmd *cobra.Command, n string, dest *(*string)) error {
+func Set(cmd *cobra.Command, n string, dest *(*[]string)) error {
 	if cmd.Flags().Changed(n) {
-		val, err := cmd.Flags().GetString(n)
+		val, err := cmd.Flags().GetStringSlice(n)
 		if err != nil {
 			return err
 		}

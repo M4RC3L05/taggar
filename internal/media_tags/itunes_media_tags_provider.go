@@ -43,6 +43,14 @@ func IntPtrToStringPtr(pi *int) *string {
 	return new(strconv.Itoa(*pi))
 }
 
+func StrPtrToStrSlicePtr(pi *string) *[]string {
+	if pi == nil {
+		return nil
+	}
+
+	return new([]string{*pi})
+}
+
 func (i ITunesMediaTagsProvider) FetchMediaTags() (*MediaTags, error) {
 	res, err := http.Get(fmt.Sprintf("https://itunes.apple.com/lookup?id=%s", i.Id))
 	if err != nil {
@@ -70,23 +78,25 @@ func (i ITunesMediaTagsProvider) FetchMediaTags() (*MediaTags, error) {
 
 	match := x.Results[0]
 	mediaTags := MediaTags{
-		AlbumArtist: match.ArtistName,
-		Artist:      match.ArtistName,
-		Album:       match.CollectionName,
-		Title:       match.TrackName,
-		Genre:       match.PrimaryGenreName,
-		Track:       IntPtrToStringPtr(match.TrackNumber),
-		TrackCount:  IntPtrToStringPtr(match.TrackCount),
-		Disc:        IntPtrToStringPtr(match.DiscNumber),
-		DiscCount:   IntPtrToStringPtr(match.DiscCount),
+		AlbumArtist: StrPtrToStrSlicePtr(match.ArtistName),
+		Artist:      StrPtrToStrSlicePtr(match.ArtistName),
+		Album:       StrPtrToStrSlicePtr(match.CollectionName),
+		Title:       StrPtrToStrSlicePtr(match.TrackName),
+		Genre:       StrPtrToStrSlicePtr(match.PrimaryGenreName),
+		Track:       StrPtrToStrSlicePtr(IntPtrToStringPtr(match.TrackNumber)),
+		TrackCount:  StrPtrToStrSlicePtr(IntPtrToStringPtr(match.TrackCount)),
+		Disc:        StrPtrToStrSlicePtr(IntPtrToStringPtr(match.DiscNumber)),
+		DiscCount:   StrPtrToStrSlicePtr(IntPtrToStringPtr(match.DiscCount)),
 	}
 
 	if match.CollectionArtistName != nil {
-		mediaTags.AlbumArtist = match.CollectionArtistName
+		mediaTags.AlbumArtist = StrPtrToStrSlicePtr(match.CollectionArtistName)
 	}
 
 	if match.ReleaseDate != nil {
-		mediaTags.Year = new(strconv.Itoa(match.ReleaseDate.In(time.Local).Year()))
+		mediaTags.Year = StrPtrToStrSlicePtr(
+			new(strconv.Itoa(match.ReleaseDate.In(time.Local).Year())),
+		)
 	}
 
 	if match.ArtworkURL100 != nil {

@@ -7,16 +7,16 @@ type MediaTagsCover struct {
 
 type MediaTags struct {
 	Cover       *MediaTagsCover
-	AlbumArtist *string
-	Album       *string
-	Title       *string
-	Year        *string
-	Artist      *string
-	Genre       *string
-	Track       *string
-	TrackCount  *string
-	Disc        *string
-	DiscCount   *string
+	AlbumArtist *[]string
+	Album       *[]string
+	Title       *[]string
+	Year        *[]string
+	Artist      *[]string
+	Genre       *[]string
+	Track       *[]string
+	TrackCount  *[]string
+	Disc        *[]string
+	DiscCount   *[]string
 }
 
 func (m *MediaTags) CopyFrom(mm *MediaTags) {

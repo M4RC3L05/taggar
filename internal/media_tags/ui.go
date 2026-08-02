@@ -16,10 +16,10 @@ func DisplayMediaTags(tags *MediaTags) error {
 
 	padW := 13
 
-	printLine := func(label string, val *string) {
+	printLine := func(label string, val *[]string) {
 		valStr := "-"
 		if val != nil {
-			valStr = *val
+			valStr = strings.Join(*val, "; ")
 		}
 
 		dots := strings.Repeat(" ", max(1, padW-len(label)))

@@ -4,6 +4,7 @@ go 1.26.4
 
 require (
 	github.com/blacktop/go-termimg v0.1.26
+	github.com/fatih/color v1.19.0
 	github.com/spf13/cobra v1.10.2
 	go.senan.xyz/taglib v0.14.0
 )
@@ -19,6 +20,8 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.4.1 // indirect
 	github.com/makeworld-the-better-one/dither/v2 v2.4.0 // indirect
+	github.com/mattn/go-colorable v0.1.14 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.27 // indirect
 	github.com/mattn/go-sixel v0.0.12 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect

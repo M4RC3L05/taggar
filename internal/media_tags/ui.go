@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/blacktop/go-termimg"
+	"github.com/fatih/color"
 )
 
 func DisplayMediaTags(tags *MediaTags) error {
@@ -17,9 +18,9 @@ func DisplayMediaTags(tags *MediaTags) error {
 	padW := 13
 
 	printLine := func(label string, val *[]string) {
-		valStr := "-"
+		valStr := color.MagentaString("-")
 		if val != nil {
-			valStr = strings.Join(*val, "; ")
+			valStr = strings.Join(*val, color.MagentaString("; "))
 		}
 
 		dots := strings.Repeat(" ", max(1, padW-len(label)))

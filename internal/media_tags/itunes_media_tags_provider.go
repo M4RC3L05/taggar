@@ -35,7 +35,7 @@ type ITunesMediaTagsProvider struct {
 
 var _ IProvider = ITunesMediaTagsProvider{}
 
-func IntPtrToStringPtr(pi *int) *string {
+func IntPtrToStrPtr(pi *int) *string {
 	if pi == nil {
 		return nil
 	}
@@ -83,10 +83,10 @@ func (i ITunesMediaTagsProvider) FetchMediaTags() (*MediaTags, error) {
 		Album:       StrPtrToStrSlicePtr(match.CollectionName),
 		Title:       StrPtrToStrSlicePtr(match.TrackName),
 		Genre:       StrPtrToStrSlicePtr(match.PrimaryGenreName),
-		Track:       StrPtrToStrSlicePtr(IntPtrToStringPtr(match.TrackNumber)),
-		TrackCount:  StrPtrToStrSlicePtr(IntPtrToStringPtr(match.TrackCount)),
-		Disc:        StrPtrToStrSlicePtr(IntPtrToStringPtr(match.DiscNumber)),
-		DiscCount:   StrPtrToStrSlicePtr(IntPtrToStringPtr(match.DiscCount)),
+		Track:       StrPtrToStrSlicePtr(IntPtrToStrPtr(match.TrackNumber)),
+		TrackCount:  StrPtrToStrSlicePtr(IntPtrToStrPtr(match.TrackCount)),
+		Disc:        StrPtrToStrSlicePtr(IntPtrToStrPtr(match.DiscNumber)),
+		DiscCount:   StrPtrToStrSlicePtr(IntPtrToStrPtr(match.DiscCount)),
 	}
 
 	if match.CollectionArtistName != nil {

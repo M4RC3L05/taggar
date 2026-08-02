@@ -18,7 +18,7 @@ var rootCmd = &cobra.Command{
 	Short:         "View and edit audio tags",
 	Args:          cobra.ExactArgs(1),
 	SilenceErrors: false,
-	Version:       "0.2.0",
+	Version:       "0.3.0",
 	SilenceUsage:  true,
 }
 

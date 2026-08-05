@@ -201,7 +201,7 @@ func (t TaglibMediaTagsRepository) SetMediaTagsFromPath(
 
 	if tags.DiscCount != nil && (props.Format == "flac" || props.Format == "opus" ||
 		props.Format == "ogg") {
-		tagsToSet["DISCTOTAL"] = *tags.Disc
+		tagsToSet["DISCTOTAL"] = *tags.DiscCount
 	}
 
 	err = taglib.WriteTags(path, tagsToSet, 0)

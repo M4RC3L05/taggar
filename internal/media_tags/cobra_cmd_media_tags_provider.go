@@ -65,7 +65,7 @@ func (i CobraCmdMediaTagsProvider) FetchMediaTags() (*MediaTags, error) {
 		return nil, err
 	}
 
-	if err := Set(i.Cmd, "distCount", &res.DiscCount); err != nil {
+	if err := Set(i.Cmd, "discCount", &res.DiscCount); err != nil {
 		return nil, err
 	}
 
